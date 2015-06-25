@@ -1,0 +1,28 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "WNJ85",
+    "longName": "Dark-Knight-Skyline",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/background.png",
+                "name": "IMAGE_BACKGROUND_COL",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "Dark-Knight-Skyline",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "4cc682b4-0d92-4859-b44f-86c8d4fb4b82",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
