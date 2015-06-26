@@ -2,6 +2,7 @@
   
 static Window *s_main_window;
 static TextLayer *s_time_layer;
+static TextLayer *s_date_layer;
 
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
@@ -22,7 +23,7 @@ static void update_time() {
     //Use 12 hour format
     strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
   }
-
+  
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, buffer);
 }
@@ -34,8 +35,7 @@ static void main_window_load(Window *window) {
   bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_background_layer));
    
-  // Create time TextLayer
-  // s_time_layer = text_layer_create(GRect(0, 55, 144, 50));
+  // Create Time TextLayer
   s_time_layer = text_layer_create(GRect(0, 25, 144, 50));
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorWhite);
@@ -50,6 +50,19 @@ static void main_window_load(Window *window) {
   
   // Make sure the time is displayed from the start
   update_time();
+
+  // Create Date TextLayer
+  s_date_layer = text_layer_create(GRect(0, 144, 144, 20));
+  text_layer_set_background_color(s_date_layer, GColorClear);
+  text_layer_set_text_color(s_date_layer, GColorWhite);
+  text_layer_set_text(s_date_layer, "AAAAAAAA ee bbb");
+  
+  // Improve the layout to be more like a watchface
+  text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
+  text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
+  
+  // Add it as a child layer to the Window's root layer
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_date_layer));
 }
 
 static void main_window_unload(Window *window) {
@@ -59,8 +72,11 @@ static void main_window_unload(Window *window) {
   //Destroy BitmapLayer
   bitmap_layer_destroy(s_background_layer);
   
-  // Destroy TextLayer
+  // Destroy Time TextLayer
   text_layer_destroy(s_time_layer);
+  
+  // Destroy Date TextLayer
+  text_layer_destroy(s_date_layer);
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
