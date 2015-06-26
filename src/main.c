@@ -13,19 +13,26 @@ static void update_time() {
   struct tm *tick_time = localtime(&temp);
 
   // Create a long-lived buffer
-  static char buffer[] = "00:00";
+  static char time_buffer[] = "00:00";
+  static char date_buffer[] = "Xxxxxxxx 00 Xxx";
 
   // Write the current hours and minutes into the buffer
   if(clock_is_24h_style() == true) {
     //Use 24h hour format
-    strftime(buffer, sizeof("00:00"), "%H:%M", tick_time);
+    strftime(time_buffer, sizeof("00:00"), "%H:%M", tick_time);
   } else {
     //Use 12 hour format
-    strftime(buffer, sizeof("00:00"), "%I:%M", tick_time);
+    strftime(time_buffer, sizeof("00:00"), "%I:%M", tick_time);
   }
   
   // Display this time on the TextLayer
-  text_layer_set_text(s_time_layer, buffer);
+  text_layer_set_text(s_time_layer, time_buffer);
+  
+  // Write the current date into the buffer
+  strftime(date_buffer, sizeof("Xxxxxxxx 00 Xxx"), "%A %e %b", tick_time);
+  
+  // Display this on the TextLayer
+  text_layer_set_text(s_date_layer, date_buffer);
 }
 
 static void main_window_load(Window *window) {
@@ -49,13 +56,13 @@ static void main_window_load(Window *window) {
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_time_layer));
   
   // Make sure the time is displayed from the start
-  update_time();
+  // update_time();
 
   // Create Date TextLayer
   s_date_layer = text_layer_create(GRect(0, 144, 144, 20));
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_color(s_date_layer, GColorWhite);
-  text_layer_set_text(s_date_layer, "AAAAAAAA ee bbb");
+  text_layer_set_text(s_date_layer, "Xxxxxxxx 00 Xxx");
   
   // Improve the layout to be more like a watchface
   text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
@@ -63,6 +70,9 @@ static void main_window_load(Window *window) {
   
   // Add it as a child layer to the Window's root layer
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_date_layer));
+  
+  // Make sure the time is displayed from the start
+  update_time();
 }
 
 static void main_window_unload(Window *window) {

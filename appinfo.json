@@ -9,6 +9,11 @@
     "resources": {
         "media": [
             {
+                "file": "images/batsign.png",
+                "name": "IMAGE_BATSIGN_COL",
+                "type": "png-trans"
+            },
+            {
                 "file": "images/background.png",
                 "name": "IMAGE_BACKGROUND_COL",
                 "type": "png"
