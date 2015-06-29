@@ -11,7 +11,7 @@
             {
                 "file": "images/batsign.png",
                 "name": "IMAGE_BATSIGN_COL",
-                "type": "png-trans"
+                "type": "png"
             },
             {
                 "file": "images/background.png",
@@ -26,7 +26,7 @@
         "basalt"
     ],
     "uuid": "4cc682b4-0d92-4859-b44f-86c8d4fb4b82",
-    "versionLabel": "1.0",
+    "versionLabel": "0.1",
     "watchapp": {
         "watchface": true
     }
