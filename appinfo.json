@@ -9,12 +9,7 @@
     "resources": {
         "media": [
             {
-                "file": "images/batsign.png",
-                "name": "IMAGE_BATSIGN_COL",
-                "type": "png"
-            },
-            {
-                "file": "images/background.png",
+                "file": "images/BG_Buildings.png",
                 "name": "IMAGE_BACKGROUND_COL",
                 "type": "png"
             }
