@@ -1,8 +1,8 @@
 {
-  "name": "Dark-Knight-Skyline",
-  "author": "WNJ85",
-  "version": "1.0.0",
-  "sdkVersion": "3",
+  "name": "GothamNight",
+  "author": "You",
+  "version": "1.1.0",
+  "sdkVersion": "4",
   "targetPlatforms": ["basalt"],
   "watchapp": {
     "watchface": true
@@ -11,8 +11,8 @@
     "media": [
       {
         "type": "png",
-        "name": "IMAGE_BG_Buildings",
-        "file": "images/BG_Buildings.png"
+        "name": "IMAGE_GOTHAM",
+        "file": "images/gotham_skyline.png"
       },
       {
         "type": "png",
