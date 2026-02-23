@@ -67,7 +67,7 @@ static void main_window_load(Window *window) {
   window_set_background_color(window, GColorOxfordBlue);
 
   // Gotham skyline along the bottom
-  s_gotham_bitmap = gbitmap_create_with_resource(BG_Buildings.png);
+  s_gotham_bitmap = gbitmap_create_with_resource(IMAGE_BG_Buildings);
   s_gotham_layer = bitmap_layer_create(bounds);
   bitmap_layer_set_bitmap(s_gotham_layer, s_gotham_bitmap);
   bitmap_layer_set_compositing_mode(s_gotham_layer, GCompOpSet);
