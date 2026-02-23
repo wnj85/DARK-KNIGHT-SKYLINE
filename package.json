@@ -1,9 +1,9 @@
 {
-  "name": "Dark-Knight-Skyline",
-  "author": "WNJ85",
-  "version": "1.1.0",
+  "name": "GothamNight",
+  "author": "You",
+  "version": "1.2.0",
   "sdkVersion": "4",
-  "targetPlatforms": ["basalt"],
+  "targetPlatforms": ["basalt", "emery"],
   "watchapp": {
     "watchface": true
   },
