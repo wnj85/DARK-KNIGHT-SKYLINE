@@ -1,6 +1,6 @@
 #include <pebble.h>
 
-#define BAT_SIGNAL_DURATION 3000  // ms to show the Bat Signal
+#define BAT_SIGNAL_DURATION 3000  // ms
 
 static Window *s_main_window;
 static BitmapLayer *s_gotham_layer;
@@ -21,7 +21,6 @@ static void update_time(void) {
   }
 
   static char s_buffer[8];
-
   time_t now = time(NULL);
   struct tm *t = localtime(&now);
 
@@ -36,22 +35,17 @@ static void update_time(void) {
 
 static void hide_batsignal_callback(void *data) {
   s_showing_batsignal = false;
-
-  // Hide Bat Signal, show time again
   layer_set_hidden(bitmap_layer_get_layer(s_batsignal_layer), true);
   layer_set_hidden(text_layer_get_layer(s_time_layer), false);
-
   update_time();
 }
 
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
   s_showing_batsignal = true;
 
-  // Show Bat Signal, hide time
   layer_set_hidden(text_layer_get_layer(s_time_layer), true);
   layer_set_hidden(bitmap_layer_get_layer(s_batsignal_layer), false);
 
-  // Reset timer
   if (s_batsignal_timer) {
     app_timer_cancel(s_batsignal_timer);
     s_batsignal_timer = NULL;
@@ -67,19 +61,23 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 static void main_window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
+  const int16_t screen_w = bounds.size.w;   // 144 on basalt, 200 on emery
+  const int16_t screen_h = bounds.size.h;   // 168 on basalt, 228 on emery
 
-  // Night sky background
   window_set_background_color(window, GColorOxfordBlue);
 
-  // Gotham skyline bitmap
+  // Gotham skyline filling the screen bottom
   s_gotham_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_GOTHAM);
   s_gotham_layer = bitmap_layer_create(bounds);
   bitmap_layer_set_bitmap(s_gotham_layer, s_gotham_bitmap);
   bitmap_layer_set_compositing_mode(s_gotham_layer, GCompOpSet);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_gotham_layer));
 
-  // Time in the sky
-  GRect time_frame = GRect(0, 10, bounds.size.w, 50);
+  // Time at the top third of the sky
+  int16_t time_height = 50;
+  int16_t time_y = screen_h / 12; // proportional so it looks OK on both
+  GRect time_frame = GRect(0, time_y, screen_w, time_height);
+
   s_time_layer = text_layer_create(time_frame);
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorWhite);
@@ -87,19 +85,19 @@ static void main_window_load(Window *window) {
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 
-  // Bat Signal bitmap in the sky
+  // Bat Signal centered in sky, slightly above time
   s_batsignal_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BAT_SIGNAL);
   GRect bat_bounds = gbitmap_get_bounds(s_batsignal_bitmap);
-  int16_t bat_x = (bounds.size.w - bat_bounds.size.w) / 2;
-  int16_t bat_y = 5;
-  GRect bat_frame = GRect(bat_x, bat_y, bat_bounds.size.w, bat_bounds.size.h);
+  int16_t bat_x = (screen_w - bat_bounds.size.w) / 2;
+  int16_t bat_y = time_y - bat_bounds.size.h / 2;
+  if (bat_y < 0) bat_y = 0;
 
+  GRect bat_frame = GRect(bat_x, bat_y, bat_bounds.size.w, bat_bounds.size.h);
   s_batsignal_layer = bitmap_layer_create(bat_frame);
   bitmap_layer_set_bitmap(s_batsignal_layer, s_batsignal_bitmap);
   bitmap_layer_set_compositing_mode(s_batsignal_layer, GCompOpSet);
   layer_add_child(window_layer, bitmap_layer_get_layer(s_batsignal_layer));
 
-  // Start with Bat Signal hidden
   layer_set_hidden(bitmap_layer_get_layer(s_batsignal_layer), true);
 
   update_time();
@@ -137,7 +135,6 @@ static void init(void) {
 static void deinit(void) {
   accel_tap_service_unsubscribe();
   tick_timer_service_unsubscribe();
-
   window_destroy(s_main_window);
 }
 
